@@ -100,6 +100,7 @@ class App(BaseApp):
         self.restore_controls()
         self.protocol('WM_DELETE_WINDOW',self.close);self.after(100,self.poll)
         self.updating=False;self.refresh_license();self.after(3000,lambda:self.check_update(False))
+        if not licensing.is_activated():self.withdraw();self.after(100,lambda:self.ask_activation(required=True))
 
     def style(self,dark=False):
         s=ttk.Style(self);s.theme_use('clam');bg='#232b36' if dark else '#fff';fg='#edf1f6' if dark else '#252b35'
@@ -275,8 +276,6 @@ class App(BaseApp):
         self.guarded(run)
 
     def run_tasks(self,selected=False):
-        if not licensing.is_activated():
-            messagebox.showinfo('ClipMerge','Chức năng Ghép của MERGE HUB cần kích hoạt. Vào Trợ giúp > Kích hoạt và nhập mã.',parent=self);return self.ask_activation()
         def prepare():
             self.idle_required();paths=self.selected_paths() if selected else list(self.task_paths)
             if not paths:raise ValueError('Thêm hoặc chọn Task TXT trước khi ghép.')
@@ -526,18 +525,25 @@ class App(BaseApp):
     def refresh_license(self):
         self.title(f'ClipMerge — v{VERSION} · '+('Đã kích hoạt' if licensing.is_activated() else 'Bản cơ bản'))
 
-    def ask_activation(self):
-        win=tk.Toplevel(self);win.title('Kích hoạt ClipMerge');win.resizable(False,False);win.transient(self)
+    def ask_activation(self,required=False):
+        win=tk.Toplevel(self);win.title('Kích hoạt ClipMerge');win.resizable(False,False)
+        if not required:win.transient(self)
+        def cancel():
+            win.destroy()
+            if required:self.destroy()
+        win.protocol('WM_DELETE_WINDOW',cancel)
         frame=ttk.Frame(win,padding=22);frame.pack()
-        ttk.Label(frame,text='Nhập mã kích hoạt để mở đầy đủ tính năng.').pack(anchor='w')
+        ttk.Label(frame,text='Nhập mã kích hoạt để sử dụng ClipMerge.').pack(anchor='w')
         code=tk.StringVar();entry=ttk.Entry(frame,textvariable=code,show='*',width=34);entry.pack(pady=(12,4))
         message=tk.StringVar();ttk.Label(frame,textvariable=message,foreground='#c0392b').pack(anchor='w')
         def submit(event=None):
             if licensing.activate(code.get()):
-                win.destroy();self.refresh_license();messagebox.showinfo('ClipMerge','Kích hoạt thành công.',parent=self)
+                win.destroy();self.refresh_license()
+                if required:self.deiconify()
+                messagebox.showinfo('ClipMerge','Kích hoạt thành công.',parent=self)
             else:code.set('');message.set('Mã không đúng. Hãy thử lại.')
         buttons=ttk.Frame(frame);buttons.pack(anchor='e',pady=(12,0))
-        ttk.Button(buttons,text='Hủy',command=win.destroy).pack(side='right');ttk.Button(buttons,text='Kích hoạt',command=submit).pack(side='right',padx=8)
+        ttk.Button(buttons,text='Thoát' if required else 'Hủy',command=cancel).pack(side='right');ttk.Button(buttons,text='Kích hoạt',command=submit).pack(side='right',padx=8)
         entry.bind('<Return>',submit);entry.focus_set();win.grab_set()
 
     def check_update(self,manual):

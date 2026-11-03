@@ -1,4 +1,4 @@
-# ClipMerge 2.0.1
+﻿# ClipMerge 2.0.1
 
 Giao diện 5 tab được làm lại theo các ảnh MMerge v2.0.7, đối chiếu tên hàm, cấu hình và chuỗi mô tả còn đọc được trong EXE v2.0.7/v3.0.0. File gốc là bản Nuitka đã biên dịch, không phải nguồn Python có thể khôi phục nguyên vẹn.
 
@@ -46,6 +46,7 @@ Các cấu hình được nhớ tại `%LOCALAPPDATA%\ClipMerge\settings.json`. 
 
 Chạy mã nguồn: `python app.py`. Đóng gói với PyInstaller, thêm `ClipMerge.ico`, `ClipMerge.png` và thư mục `tkdnd` vào tài nguyên. Dùng `version.txt` cho thông tin phiên bản; sau khi dựng, chép EXE và `_internal` về cạnh `installer.iss`, giữ `bin`, rồi biên dịch `ISCC installer.iss` bằng Inno Setup 6.
 
-Cập nhật tự động (từ 2.1.0): app đọc `version.json` trong thư mục cập nhật trên mạng LAN (chọn ở lần đầu bấm Trợ giúp > Kiểm tra cập nhật; lưu ở `%APPDATA%\ClipMerge\update.json`), kiểm tra SHA-256 trước khi cài. Chỉ bản đã kích hoạt mới cập nhật được. Kích hoạt: Trợ giúp > Kích hoạt, mã nhập hiện dấu `*`; trong code chỉ có mã băm (`licensing.py`, tạo bằng `python tools\make_hash.py`). Chưa kích hoạt thì khoá Ghép của MERGE HUB. Tạo thư mục phát hành: `python tools\make_release.py <file cài đặt> <phiên bản> D:\Code\CAP_NHAT\ClipMerge "ghi chú"`; chỉ cho tài khoản quản trị quyền ghi vào thư mục chia sẻ.
+Cập nhật tự động (từ 2.1.0): app đọc `version.json` trong thư mục cập nhật trên mạng LAN (chọn ở lần đầu bấm Trợ giúp > Kiểm tra cập nhật; lưu ở `%APPDATA%\ClipMerge\update.json`), kiểm tra SHA-256 trước khi cài. Chỉ bản đã kích hoạt mới cập nhật được. Kích hoạt: Trợ giúp > Kích hoạt, mã nhập hiện dấu `*`; trong code chỉ có mã băm (`licensing.py`, tạo bằng `python tools\make_hash.py`). Chưa nhập đúng mã thì không dùng được app (mở app là hiện hộp nhập mã). Tạo thư mục phát hành: `python tools\make_release.py <file cài đặt> <phiên bản> D:\Code\CAP_NHAT\ClipMerge "ghi chú"`; chỉ cho tài khoản quản trị quyền ghi vào thư mục chia sẻ.
 
 FFmpeg GPLv3 và các thư viện đi kèm: xem `licenses`. TkDND có bản thông báo bản quyền/điều khoản gốc trong `licenses/TkDND-license-and-notices.tcl`. Không phân phối EXE của MMerge, không dùng dịch vụ kích hoạt/cập nhật của MMerge.
+
