@@ -1,0 +1,14 @@
+# Bản build và file nhị phân (phát hành qua thư mục cập nhật LAN, không đưa vào git)
+bin/
+_internal/
+build/
+dist/
+__pycache__/
+*.pyc
+*.exe
+*.spec
+
+# Bí mật
+*.key
+.env
+MA_KICH_HOAT*
