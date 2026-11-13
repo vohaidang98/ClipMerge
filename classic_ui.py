@@ -17,7 +17,7 @@ import threading
 import licensing
 import updater
 
-VERSION='2.1.0'
+VERSION='2.1.1'
 ASSETS=Path(getattr(sys,'_MEIPASS',Path(__file__).parent))
 BLUE='#3599cc';DARK='#2e4053';RED='#e85c48';ORANGE='#f0a313';GREEN='#1db8a2';GRAY='#91a2a4'
 
@@ -554,15 +554,9 @@ class App(BaseApp):
         if self.busy:
             if manual:messagebox.showinfo('ClipMerge','Đang xử lý. Hãy đợi xong rồi cập nhật.',parent=self)
             return
-        folder=updater.get_folder('ClipMerge')
-        if not folder:
-            if not manual:return
-            folder=filedialog.askdirectory(title='Chọn thư mục cập nhật (trên mạng LAN)',parent=self)
-            if not folder:return
-            updater.set_folder('ClipMerge',folder)
         self.updating=True
         def work():
-            try:self.events.put(('update',(updater.check_latest(folder,VERSION),manual)))
+            try:self.events.put(('update',(updater.check_latest(VERSION),manual)))
             except Exception as exc:self.events.put(('update_error',(str(exc),manual)))
         threading.Thread(target=work,daemon=True).start()
 
@@ -590,8 +584,6 @@ class App(BaseApp):
                     self.updating=False
                     if value[1]:
                         self.state.set('Cập nhật thất bại');messagebox.showerror('ClipMerge',f'Không cập nhật được:\n{value[0]}',parent=self)
-                        if messagebox.askyesno('ClipMerge','Chọn lại thư mục cập nhật?',parent=self):
-                            updater.set_folder('ClipMerge','');self.after(100,lambda:self.check_update(True))
                 elif kind=='install':updater.install(value);self.destroy();return
                 elif kind=='phase':
                     path,stage,i,n=value;label={'check':'Kiểm tra','audio':'Đo âm thanh','encode':'Mã hóa','join':'Nối cuối','validate':'Kiểm tra kết quả','complete':'Hoàn tất'}.get(stage,stage);text=f'{label} {i}/{n}' if stage in ('check','audio','encode') else label

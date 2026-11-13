@@ -1,4 +1,4 @@
-# Bản build và file nhị phân (phát hành qua thư mục cập nhật LAN, không đưa vào git)
+# Bản build và file nhị phân (phát hành qua GitHub Releases, không đưa vào git)
 bin/
 _internal/
 build/
@@ -6,6 +6,7 @@ dist/
 __pycache__/
 *.pyc
 *.exe
+*.exe.sha256
 *.spec
 
 # Bí mật
