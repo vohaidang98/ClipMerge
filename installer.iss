@@ -1,4 +1,4 @@
-﻿#define AppVersion "2.1.0"
+﻿#define AppVersion "2.1.1"
 [Setup]
 AppId={{E733661E-35C8-45F3-93A7-CA839B1AA342}
 AppName=ClipMerge
